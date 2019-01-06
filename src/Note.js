@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FaPencilAlt, FaTrashAlt,FaSave } from "react-icons/fa";
+import { FaPencilAlt, FaTrashAlt, FaSave } from "react-icons/fa";
 
 class Note extends Component {
   constructor(props) {
@@ -18,18 +18,24 @@ class Note extends Component {
     this.setState({ edit: true });
   }
   remove() {
-    alert("Remove note");
+    this.props.onRemove(this.props.index);
+    //alert("Remove note");
   }
-  save() {
+  save(e) {
+    e.preventDefault();
+    this.props.onChange(this._newText.value, this.props.index);
     this.setState({ edit: false });
-    alert(this._newText.value);
   }
 
   renderForm() {
     return (
       <div className="note">
-        <textarea ref={input=>this._newText = input}/>
-        <button onClick={this.save}><FaSave/></button>
+        <form onSubmit={this.save}>
+          <textarea ref={input => (this._newText = input)} />
+          <button id="save">
+            <FaSave />
+          </button>
+        </form>
       </div>
     );
   }
@@ -51,7 +57,7 @@ class Note extends Component {
   }
 
   render() {
-      return this.state.edit ? this.renderForm() : this.renderDisplay();
+    return this.state.edit ? this.renderForm() : this.renderDisplay();
   }
 }
 
